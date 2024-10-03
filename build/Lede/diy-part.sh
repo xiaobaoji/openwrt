@@ -120,8 +120,6 @@ sed -i 's/"uHttpd"/"端口设置"/g' `egrep "uHttpd" -rl ./`
 sed -i 's/"TTYD 终端"/"终端机"/g' `egrep "TTYD 终端" -rl ./`
 sed -i 's/"uHTTPd"/"端口管理"/g' `egrep "uHTTPd" -rl ./`
 sed -i 's/"DDNSTO 远程控制"/"DDNSTO"/g' `egrep "DDNSTO 远程控制" -rl ./`
-sed -i 's/"udpxy"/"组播设置"/g' `egrep "udpxy" -rl ./`
-sed -i 's/"socat"/"端口转发"/g' `egrep "socat" -rl ./`
 
 
 # 整理固件包时候,删除您不想要的固件或者文件,让它不需要上传到Actions空间(根据编译机型变化,自行调整删除名称)
