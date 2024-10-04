@@ -87,7 +87,7 @@ sed -i 's/"Web 管理"/"Web管理"/g' `egrep "Web 管理" -rl ./`
 #sed -i 's/"带宽监控"/"监控"/g' `egrep "带宽监控" -rl ./`
 
 # 修改插件名字
-sed -i 's/"KMS 服务器"/"KMS 激活"/g' `egrep "KMS 服务器" -rl ./`
+sed -i 's/"KMS 服务器"/"KMS激活"/g' `egrep "KMS 服务器" -rl ./`
 sed -i 's/"Web 管理"/"管理"/g' `egrep "Web 管理" -rl ./`
 sed -i 's/"管理权"/"管理员"/g' `egrep "管理权" -rl ./`
 sed -i 's/"阿里云盘 WebDAV"/"阿里云盘"/g' `egrep "阿里云盘 WebDAV" -rl ./`
