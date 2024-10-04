@@ -120,7 +120,7 @@ sed -i 's/"uHttpd"/"端口设置"/g' `egrep "uHttpd" -rl ./`
 sed -i 's/"TTYD 终端"/"终端机"/g' `egrep "TTYD 终端" -rl ./`
 sed -i 's/"uHTTPd"/"端口管理"/g' `egrep "uHTTPd" -rl ./`
 sed -i 's/"DDNSTO 远程控制"/"DDNSTO"/g' `egrep "DDNSTO 远程控制" -rl ./`
-sed -i 's/"IP/MAC Binding"/"IP/MAC"/g' `egrep "IP/MAC Binding" -rl ./`
+#sed -i 's/"IP/MAC Binding"/"IP/MAC"/g' `egrep "IP/MAC Binding" -rl ./`
 
 
 
