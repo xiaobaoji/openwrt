@@ -56,7 +56,7 @@ export Disable_NaiveProxy="1"                # 因个别源码的分支不支持
 export Automatic_Mount_Settings="1"          # 编译时加入开启NTFS格式盘挂载的所需依赖(1为启用命令,填0为不作修改)
 
 # 去除网络共享(autosamba)
-export Disable_autosamba="0"                 # 去掉源码默认自选的luci-app-samba或luci-app-samba4(1为启用命令,填0为不作修改)
+export Disable_autosamba="1"                 # 去掉源码默认自选的luci-app-samba或luci-app-samba4(1为启用命令,填0为不作修改)
 
 # 其他
 export Ttyd_account_free_login="1"           # 设置ttyd免密登录(1为启用命令,填0为不作修改)
@@ -92,9 +92,9 @@ sed -i 's/"Web 管理"/"管理"/g' `egrep "Web 管理" -rl ./`
 sed -i 's/"管理权"/"管理员"/g' `egrep "管理权" -rl ./`
 sed -i 's/"阿里云盘 WebDAV"/"阿里云盘"/g' `egrep "阿里云盘 WebDAV" -rl ./`
 sed -i 's/"UPnP"/"即插即用"/g' `egrep "UPnP" -rl ./`
-sed -i 's/"诊断"/"网络诊断"/g' `egrep "诊断" -rl ./`
+#sed -i 's/"诊断"/"网络诊断"/g' `egrep "诊断" -rl ./`
 sed -i 's/"主机名"/"主机名称"/g' `egrep "主机名" -rl ./`
-sed -i 's/"重启"/"重启项"/g' `egrep "重启" -rl ./`
+sed -i 's/"重启"/"重新启动"/g' `egrep "重启" -rl ./`
 sed -i 's/"关机"/"关闭电源"/g' `egrep "关机" -rl ./`
 sed -i 's/"主机名"/"主机名称"/g' `egrep "主机名" -rl ./`
 sed -i 's/"Socat"/"端口转发"/g' `egrep "Socat" -rl ./`
