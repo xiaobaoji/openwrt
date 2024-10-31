@@ -95,19 +95,19 @@ sed -i 's/"UPnP"/"UPnP设置"/g' `egrep "UPnP" -rl ./`
 sed -i 's/"诊断"/"网络诊断"/g' `egrep "诊断" -rl ./`
 sed -i 's/"Argon设置"/"主题设置"/g' `egrep "Argon设置" -rl ./`
 sed -i 's/"重启"/"重启项"/g' `egrep "重启" -rl ./`
-sed -i 's/"关机"/"关闭电源"/g' `egrep "关机" -rl ./`
+#sed -i 's/"关机"/"关闭电源"/g' `egrep "关机" -rl ./`
 sed -i 's/"备份与升级"/"备份/升级"/g' `egrep "备份与升级" -rl ./`
 sed -i 's/"DHCP/DNS"/"转发"/g' `egrep "DHCP/DNS" -rl ./`
 sed -i 's/"网络唤醒Plus"/"网络唤醒"/g' `egrep "网络唤醒Plus" -rl ./`
 sed -i 's/"网络存储"/"NAS"/g' `egrep "网络存储" -rl ./`
-sed -i 's/"设置向导"/"向导"/g' `egrep "设置向导" -rl ./`
+#sed -i 's/"设置向导"/"向导"/g' `egrep "设置向导" -rl ./`
 sed -i 's/"AdGuard Home"/"广告屏蔽"/g' `egrep "AdGuard Home" -rl ./`
 sed -i 's/"路由表"/"用户列表"/g' `egrep "路由表" -rl ./`
 sed -i 's/"挂载点"/"挂载分区"/g' `egrep "挂载点" -rl ./`
 sed -i 's/"FTP 服务器"/"FTP 服务"/g' `egrep "FTP 服务器" -rl ./`
-sed -i 's/"uHttpd"/"端口设置"/g' `egrep "uHttpd" -rl ./`
+#sed -i 's/"uHttpd"/"端口设置"/g' `egrep "uHttpd" -rl ./`
 sed -i 's/"TTYD 终端"/"终端机"/g' `egrep "TTYD 终端" -rl ./`
-sed -i 's/"uHTTPd"/"端口管理"/g' `egrep "uHTTPd" -rl ./`
+#sed -i 's/"uHTTPd"/"端口管理"/g' `egrep "uHTTPd" -rl ./`
 sed -i 's/"DDNSTO 远程控制"/"DDNSTO"/g' `egrep "DDNSTO 远程控制" -rl ./`
 
 
