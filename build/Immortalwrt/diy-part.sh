@@ -97,7 +97,7 @@ sed -i 's/"诊断"/"网络诊断"/g' `egrep "诊断" -rl ./`
 #sed -i 's/"重启"/"重启项"/g' `egrep "重启" -rl ./`
 #sed -i 's/"关机"/"关闭电源"/g' `egrep "关机" -rl ./`
 #sed -i 's/"备份与升级"/"备份/升级"/g' `egrep "备份与升级" -rl ./`
-sed -i 's/"DHCP/DNS"/"转发"/g' `egrep "DHCP/DNS" -rl ./`
+#sed -i 's/"DHCP/DNS"/"转发"/g' `egrep "DHCP/DNS" -rl ./`
 #sed -i 's/"网络唤醒Plus"/"网络唤醒"/g' `egrep "网络唤醒Plus" -rl ./`
 sed -i 's/"网络存储"/"NAS"/g' `egrep "网络存储" -rl ./`
 #sed -i 's/"设置向导"/"向导"/g' `egrep "设置向导" -rl ./`
