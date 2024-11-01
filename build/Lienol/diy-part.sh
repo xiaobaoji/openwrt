@@ -95,7 +95,7 @@ sed -i 's/"KMS 服务器"/"KMS 激活"/g' `egrep "KMS 服务器" -rl ./`
 sed -i 's/"Web 管理"/"管理"/g' `egrep "Web 管理" -rl ./`
 sed -i 's/"管理权"/"管理员"/g' `egrep "管理权" -rl ./`
 sed -i 's/"阿里云盘 WebDAV"/"阿里云盘"/g' `egrep "阿里云盘 WebDAV" -rl ./`
-sed -i 's/"UPnP"/"即用即插"/g' `egrep "UPnP" -rl ./`
+sed -i 's/"UPnP"/"即插即用"/g' `egrep "UPnP" -rl ./`
 sed -i 's/"诊断"/"网络诊断"/g' `egrep "诊断" -rl ./`
 #sed -i 's/"Argon设置"/"主题设置"/g' `egrep "Argon设置" -rl ./`
 #sed -i 's/"重启"/"重启项"/g' `egrep "重启" -rl ./`
