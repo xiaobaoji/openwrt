@@ -38,7 +38,7 @@ export OpenClash_branch="0"                 # OpenClash的源码分别有【mast
 export OpenClash_Core="2"                   # 增加OpenClash时,把核心下载好,(填1为下载【dev单核】,填2为下载【dev/meta/premium三核】,填0为不需要核心)
 
 # 个性签名,默认增加年月日[$(TZ=UTC-8 date "+%Y.%m.%d")]
-export Customized_Information="大灰狼 $(TZ=UTC-8 date "+%Y.%m.%d")"  # 个性签名,你想写啥就写啥，(填0为不作修改)
+export Customized_Information="小鲶鱼 $(TZ=UTC-8 date "+%Y.%m.%d")"  # 个性签名,你想写啥就写啥，(填0为不作修改)
 
 # 更换固件内核
 export Replace_Kernel="6.6"                    # 更换内核版本,在对应源码的[target/linux/架构]查看patches-x.x,看看x.x有啥就有啥内核了(填入内核x.x版本号,填0为不作修改)
@@ -90,29 +90,17 @@ export kernel_usage="stable"
 
 
 # 修改插件名字
-sed -i 's/"KMS 服务器"/"KMS 激活"/g' `egrep "KMS 服务器" -rl ./`
-sed -i 's/"Web 管理"/"管理"/g' `egrep "Web 管理" -rl ./`
-sed -i 's/"管理权"/"管理员"/g' `egrep "管理权" -rl ./`
-sed -i 's/"阿里云盘 WebDAV"/"阿里云盘"/g' `egrep "阿里云盘 WebDAV" -rl ./`
-sed -i 's/"UPnP"/"即插即用"/g' `egrep "UPnP" -rl ./`
-#sed -i 's/"诊断"/"网络诊断"/g' `egrep "诊断" -rl ./`
-#sed -i 's/"主机名"/"主机名称"/g' `egrep "主机名" -rl ./`
-#sed -i 's/"重启"/"重启项"/g' `egrep "重启" -rl ./`
-#sed -i 's/"关机"/"关闭电源"/g' `egrep "关机" -rl ./`
-#sed -i 's/"主机名"/"主机名称"/g' `egrep "主机名" -rl ./`
-sed -i 's/"Socat"/"端口转发"/g' `egrep "Socat" -rl ./`
-sed -i 's/"网络唤醒Plus"/"网络唤醒"/g' `egrep "网络唤醒Plus" -rl ./`
+sed -i 's/"aMule设置"/"电驴下载"/g' `egrep "aMule设置" -rl ./`
 sed -i 's/"网络存储"/"NAS"/g' `egrep "网络存储" -rl ./`
+sed -i 's/"Turbo ACC 网络加速"/"网络加速"/g' `egrep "Turbo ACC 网络加速" -rl ./`
+sed -i 's/"实时流量监测"/"流量"/g' `egrep "实时流量监测" -rl ./`
+sed -i 's/"KMS 服务器"/"KMS激活"/g' `egrep "KMS 服务器" -rl ./`
+sed -i 's/"TTYD 终端"/"TTYD"/g' `egrep "TTYD 终端" -rl ./`
+sed -i 's/"USB 打印服务器"/"打印服务"/g' `egrep "USB 打印服务器" -rl ./`
+sed -i 's/"Web 管理"/"Web管理"/g' `egrep "Web 管理" -rl ./`
+sed -i 's/"管理权"/"改密码"/g' `egrep "管理权" -rl ./`
+sed -i 's/"带宽监控"/"监控"/g' `egrep "带宽监控" -rl ./`
 sed -i 's/"设置向导"/"向导"/g' `egrep "设置向导" -rl ./`
-#sed -i 's/"AdGuard Home"/"广告屏蔽"/g' `egrep "AdGuard Home" -rl ./`
-#sed -i 's/"路由表"/"用户列表"/g' `egrep "路由表" -rl ./`
-#sed -i 's/"挂载点"/"挂载分区"/g' `egrep "挂载点" -rl ./`
-sed -i 's/"FTP 服务器"/"FTP 服务"/g' `egrep "FTP 服务器" -rl ./`
-sed -i 's/"uHttpd"/"端口设置"/g' `egrep "uHttpd" -rl ./`
-sed -i 's/"TTYD 终端"/"终端机"/g' `egrep "TTYD 终端" -rl ./`
-#sed -i 's/"uHTTPd"/"端口管理"/g' `egrep "uHTTPd" -rl ./`
-#sed -i 's/"DDNSTO 远程控制"/"DDNSTO"/g' `egrep "DDNSTO 远程控制" -rl ./`
-#sed -i 's/"IP/MAC Binding"/"IP/MAC"/g' `egrep "IP/MAC Binding" -rl ./`
 
 
 # 整理固件包时候,删除您不想要的固件或者文件,让它不需要上传到Actions空间(根据编译机型变化,自行调整删除名称)
