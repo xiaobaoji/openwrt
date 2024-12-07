@@ -9,18 +9,15 @@ on:
   workflow_dispatch:
     inputs:
       REPO_BRANCH:
-        description: '（openwrt）请选择源码分支'
+        description: '（openwrt官方）请选择源码分支'
         required: true
-        default: '24.10'
+        default: 'openwrt-24.10'
         type: choice
         options:
           - 'master'
-          - '21.10'
-          - '22.03'
-          - '24.10'
-          - 'master-mt7981'
-          - 'pr-rm-ax6000'
-          - 'pr-wolfssl'
+          - 'openwrt-21.10'
+          - 'openwrt-22.03'
+          - 'openwrt-24.10'
       CONFIG_FILE:
         description: '请选择配置文件'
         required: true
