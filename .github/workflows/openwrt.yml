@@ -11,10 +11,10 @@ on:
       REPO_BRANCH:
         description: '（openwrt官方）请选择源码分支'
         required: true
-        default: 'openwrt-24.10'
+        default: 'main'
         type: choice
         options:
-          - 'master'
+          - 'main'
           - 'openwrt-22.03'
           - 'openwrt-23.05'
           - 'openwrt-24.10'
