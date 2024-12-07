@@ -107,9 +107,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [openwrt]
+        target: [Official]
         
-        # 请勿对 target: [openwrt] 做任何修改
+        # 请勿对 target: [Officia] 做任何修改
         
     steps:
     - name: 密匙检测（密匙为空则退出）
