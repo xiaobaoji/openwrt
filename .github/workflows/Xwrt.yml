@@ -4,20 +4,20 @@
 #
 #
 
-name: Xwrt-源码
+name: openwrt-官方
 on:
   workflow_dispatch:
     inputs:
       REPO_BRANCH:
-        description: '（Xwrt源码）请选择源码分支'
+        description: '（openwrt）请选择源码分支'
         required: true
-        default: 'master'
+        default: '24.10'
         type: choice
         options:
           - 'master'
           - '21.10'
           - '22.03'
-          - 'pr-fix-nand_do_platform_check'
+          - '24.10'
           - 'master-mt7981'
           - 'pr-rm-ax6000'
           - 'pr-wolfssl'
@@ -130,7 +130,7 @@ jobs:
     - name: 检测文件和对比上游版本
       run: |
         cd ${GITHUB_WORKSPACE}
-        bash <(curl -fsSL https://raw.githubusercontent.com/shidahuilang/common/main/custom/first.sh)
+        bash <(curl -fsSL https://raw.githubusercontent.com/xiaobaoji/common/main/custom/first.sh)
         source ${GITHUB_WORKSPACE}/build/${{ env.FOLDER_NAME }}/settings.ini
         export INPUTS_REPO_BRANCH="${{ github.event.inputs.REPO_BRANCH }}"
         export INPUTS_CONFIG_FILE="${{ github.event.inputs.CONFIG_FILE }}"
