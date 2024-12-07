@@ -15,8 +15,8 @@ on:
         type: choice
         options:
           - 'master'
-          - 'openwrt-21.10'
           - 'openwrt-22.03'
+          - 'openwrt-23.05'
           - 'openwrt-24.10'
       CONFIG_FILE:
         description: '请选择配置文件'
