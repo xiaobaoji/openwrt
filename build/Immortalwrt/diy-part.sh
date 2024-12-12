@@ -8,7 +8,7 @@
 
 
 # 后台IP设置
-export Ipv4_ipaddr="192.168.123.2"            # 修改openwrt后台地址(填0为关闭)
+export Ipv4_ipaddr="192.168.123.3"            # 修改openwrt后台地址(填0为关闭)
 export Netmask_netm="255.255.255.0"         # IPv4 子网掩码（默认：255.255.255.0）(填0为不作修改)
 export Op_name="OpenWrt"                # 修改主机名称为OpenWrt(填0为不作修改)
 
@@ -90,7 +90,7 @@ sed -i 's/"USB 打印服务器"/"打印服务"/g' `egrep "USB 打印服务器" -
 sed -i 's/"Web 管理"/"Web管理"/g' `egrep "Web 管理" -rl ./`
 sed -i 's/"管理权"/"改密码"/g' `egrep "管理权" -rl ./`
 sed -i 's/"带宽监控"/"监控"/g' `egrep "带宽监控" -rl ./`
-sed -i 's/"MihomoTProxy"/"透明网关"/g' `egrep "MihomoTProxy" -rl ./`
+sed -i 's/"mihomo"/"透明网关"/g' `egrep "mihomo" -rl ./`
 
 
 # 整理固件包时候,删除您不想要的固件或者文件,让它不需要上传到Actions空间(根据编译机型变化,自行调整删除名称)
