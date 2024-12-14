@@ -92,6 +92,7 @@ sed -i 's/"管理权"/"改密码"/g' `egrep "管理权" -rl ./`
 sed -i 's/"带宽监控"/"监控"/g' `egrep "带宽监控" -rl ./`
 sed -i 's/"MihomoTProxy"/"透明网关"/g' `egrep "MihomoTProxy" -rl ./`
 sed -i 's/"AdGuard Home"/"广告屏蔽"/g' `egrep "AdGuard Home" -rl ./`
+sed -i 's/"挂载点"/"挂载文件"/g' `egrep "挂载点" -rl ./`
 
 # 整理固件包时候,删除您不想要的固件或者文件,让它不需要上传到Actions空间(根据编译机型变化,自行调整删除名称)
 cat >"$CLEAR_PATH" <<-EOF
