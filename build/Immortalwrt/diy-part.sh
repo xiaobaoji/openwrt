@@ -91,7 +91,7 @@ sed -i 's/"带宽监控"/"监控"/g' `egrep "带宽监控" -rl ./`
 sed -i 's/"Nikki"/"透明网关"/g' `egrep "Nikki" -rl ./`
 sed -i 's/"upnp"/"即插即用"/g' `egrep "npnp" -rl ./`
 sed -i 's/"Design设置"/"主题设置"/g' `egrep "Design设置" -rl ./`
-
+sed -i 's/"AdGuardHome"/"广告屏蔽"/g' `egrep "AdGuardHome" -rl ./`
 
 
 # 整理固件包时候,删除您不想要的固件或者文件,让它不需要上传到Actions空间(根据编译机型变化,自行调整删除名称)
