@@ -77,7 +77,7 @@ export kernel_usage="stable"
 
 
 # 修改插件名字
-sed -i 's/"动态 DNS"/动态DNS"/g' `egrep "动态 DNS" -rl ./`
+# sed -i 's/"动态 DNS"/动态DNS"/g' `egrep "动态 DNS" -rl ./`
 sed -i 's/"备份与升级"/"备份升级"/g' `egrep "备份与升级" -rl ./`
 sed -i 's/"网络存储"/"NAS"/g' `egrep "网络存储" -rl ./`
 sed -i 's/"挂载点"/"存储目录"/g' `egrep "挂载点" -rl ./`
