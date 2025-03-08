@@ -80,8 +80,8 @@ export kernel_usage="stable"
 sed -i 's/"终端"/"TTYD"/g' `egrep "终端" -rl ./`
 sed -i 's/"备份与升级"/"备份升级"/g' `egrep "备份与升级" -rl ./`
 sed -i 's/"网络存储"/"NAS"/g' `egrep "网络存储" -rl ./`
-sed -i 's/"挂载点"/"挂载目录"/g' `egrep "挂载点" -rl ./`
-sed -i 's/"DHCP/DNS"/"助手"/g' `egrep "DHCP/DNS" -rl ./`
+sed -i 's/"挂载点"/"存储目录"/g' `egrep "挂载点" -rl ./`
+sed -i 's/"DHCP/DNS"/"DHCP"/g' `egrep "DHCP/DNS" -rl ./`
 sed -i 's/"网络诊断"/"诊断"/g' `egrep "网络诊断" -rl ./`
 # sed -i 's/"TTYD 终端"/"TTYD"/g' `egrep "TTYD 终端" -rl ./`
 # sed -i 's/"USB 打印服务器"/"打印服务"/g' `egrep "USB 打印服务器" -rl ./`
