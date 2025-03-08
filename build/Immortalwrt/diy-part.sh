@@ -78,9 +78,9 @@ export kernel_usage="stable"
 
 # 修改插件名字
 sed -i 's/"终端"/"TTYD"/g' `egrep "终端" -rl ./`
-# sed -i 's/"备份与升级"/"备份升级"/g' `egrep "备份与升级" -rl ./`
+sed -i 's/"备份与升级"/"备份升级"/g' `egrep "备份与升级" -rl ./`
 sed -i 's/"网络存储"/"NAS"/g' `egrep "网络存储" -rl ./`
-sed -i 's/"挂载点"/"挂载目录"/g' `egrep "挂载点" -rl ./`
+# sed -i 's/"挂载点"/"挂载目录"/g' `egrep "挂载点" -rl ./`
 sed -i 's/"实时流量监测"/"流量"/g' `egrep "实时流量监测" -rl ./`
 # sed -i 's/"KMS 服务器"/"KMS激活"/g' `egrep "KMS 服务器" -rl ./`
 sed -i 's/"TTYD 终端"/"TTYD"/g' `egrep "TTYD 终端" -rl ./`
