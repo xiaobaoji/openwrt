@@ -90,7 +90,7 @@ sed -i 's/"管理权"/"改密码"/g' `egrep "管理权" -rl ./`
 sed -i 's/"带宽监控"/"监控"/g' `egrep "带宽监控" -rl ./`
 sed -i 's/"Nikki"/"透明网关"/g' `egrep "Nikki" -rl ./`
 sed -i 's/"upnp"/"即插即用"/g' `egrep "npnp" -rl ./`
-sed -i 's/"Design设置"/"主题设置"/g' `egrep "Design设置" -rl ./`
+# sed -i 's/"Argon设置"/"主题设置"/g' `egrep 'Argon设置" -rl ./`
 sed -i 's/"AdGuardHome"/"广告屏蔽"/g' `egrep "AdGuardHome" -rl ./`
 
 
