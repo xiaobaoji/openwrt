@@ -88,7 +88,7 @@ sed -i 's/"挂载点"/"存储目录"/g' `egrep "挂载点" -rl ./`
 # sed -i 's/"Web 管理"/"Web管理"/g' `egrep "Web 管理" -rl ./`
 sed -i 's/"管理权"/"密码"/g' `egrep "管理权" -rl ./`
 # sed -i 's/"带宽监控"/"监控"/g' `egrep "带宽监控" -rl ./`
-sed -i 's/"Nikki"/"透明网关"/g' `egrep "Nikki" -rl ./`
+# sed -i 's/"Nikki"/"透明网关"/g' `egrep "Nikki" -rl ./`
 sed -i 's/"UPnP"/"即插即用"/g' `egrep "UPnP" -rl ./`
 # sed -i 's/"Argon设置"/"主题设置"/g' `egrep 'Argon设置" -rl ./`
 sed -i 's/"AdGuard Home"/"广告屏蔽"/g' `egrep "AdGuard Home" -rl ./`
