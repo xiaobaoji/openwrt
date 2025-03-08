@@ -78,20 +78,22 @@ export kernel_usage="stable"
 
 # 修改插件名字
 sed -i 's/"终端"/"TTYD"/g' `egrep "终端" -rl ./`
-sed -i 's/"aMule设置"/"电驴下载"/g' `egrep "aMule设置" -rl ./`
+sed -i 's/"备份与升级"/"备份升级"/g' `egrep "备份与升级" -rl ./`
 sed -i 's/"网络存储"/"NAS"/g' `egrep "网络存储" -rl ./`
-sed -i 's/"Turbo ACC 网络加速"/"网络加速"/g' `egrep "Turbo ACC 网络加速" -rl ./`
+sed -i 's/"挂载点"/"挂载目录"/g' `egrep "挂载点" -rl ./`
 sed -i 's/"实时流量监测"/"流量"/g' `egrep "实时流量监测" -rl ./`
 sed -i 's/"KMS 服务器"/"KMS激活"/g' `egrep "KMS 服务器" -rl ./`
 sed -i 's/"TTYD 终端"/"TTYD"/g' `egrep "TTYD 终端" -rl ./`
 sed -i 's/"USB 打印服务器"/"打印服务"/g' `egrep "USB 打印服务器" -rl ./`
 sed -i 's/"Web 管理"/"Web管理"/g' `egrep "Web 管理" -rl ./`
-sed -i 's/"管理权"/"改密码"/g' `egrep "管理权" -rl ./`
+sed -i 's/"管理权"/"密码"/g' `egrep "管理权" -rl ./`
 sed -i 's/"带宽监控"/"监控"/g' `egrep "带宽监控" -rl ./`
 sed -i 's/"Nikki"/"透明网关"/g' `egrep "Nikki" -rl ./`
-sed -i 's/"upnp"/"即插即用"/g' `egrep "npnp" -rl ./`
-# sed -i 's/"Argon设置"/"主题设置"/g' `egrep 'Argon设置" -rl ./`
-sed -i 's/"AdGuardHome"/"广告屏蔽"/g' `egrep "AdGuardHome" -rl ./`
+sed -i 's/"UPnP"/"即插即用"/g' `egrep "UPnP" -rl ./`
+sed -i 's/"Argon设置"/"主题设置"/g' `egrep 'Argon设置" -rl ./`
+sed -i 's/"AdGuard Home"/"广告屏蔽"/g' `egrep "AdGuard Home" -rl ./`
+sed -i 's/"frp 客户端"/"内网穿透"/g' `egrep "frp 客户端" -rl ./`
+sed -i 's/"Vlmcsd KMS 服务器"/"微软激活"/g' `egrep "Vlmcsd KMS 服务器" -rl ./`
 
 
 # 整理固件包时候,删除您不想要的固件或者文件,让它不需要上传到Actions空间(根据编译机型变化,自行调整删除名称)
