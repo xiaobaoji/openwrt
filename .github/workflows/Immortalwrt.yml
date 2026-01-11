@@ -3,14 +3,14 @@
 #
 #
 
-name: Immortalwrt-天灵
+name: Immortalwrt-源码
 on:
   workflow_dispatch:
     inputs:
       REPO_BRANCH:
         description: '天灵源码-请选择分支'
         required: true
-        default: 'openwrt-24.10'
+        default: 'master'
         type: choice
         options:
           - 'openwrt-23.05'
