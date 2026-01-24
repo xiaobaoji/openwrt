@@ -21,7 +21,7 @@ Diy_menu2() {
 # Diy_menu3：更新插件源（工作流调用）
 Diy_menu3() {
   echo "===== 更新所有插件源 ====="
-  ./scripts/feeds update -a --force-update  # 强制更新插件源
+  ./scripts/feeds update -a  # 强制更新插件源
 }
 
 # Diy_menu4：加载自定义配置（工作流调用）
