@@ -1,4 +1,4 @@
-# Fanchmwrt-UGREEN-x64 云编译工作流（修复分支空值问题）
+# Fanchmwrt-UGREEN-x64 云编译工作流（最终完整版）
 name: Fanchmwrt-UGREEN-x64
 on:
   workflow_dispatch:
@@ -12,11 +12,11 @@ on:
           - 'fanchmwrt-24.10.4'
       REPO_BRANCH_OPENWRT:
         description: 'openwrt基础分支选择（必填）'
-        required: true  # 强制必填，避免空值
-        default: 'fanchmwrt-24.10.4'  # 设为仓库实际存在的分支（请确认仓库分支名，若不是main需修改）
+        required: true
+        default: 'fanchmwrt-24.10.4'  # 改为fanchmwrt-24.10.4
         type: choice
         options:
-          - 'fanchmwrt-24.10.4'  # 仅保留仓库实际存在的分支
+          - 'fanchmwrt-24.10.4'  # 仅保留该分支，与主分支一致
       CONFIG_FILE:
         description: '请选择[seed文件夹内]的配置文件'
         required: true
@@ -111,7 +111,6 @@ jobs:
       fail-fast: false
       matrix:
         target: [Fanchmwrt]
-        # 请勿对 target: [Fanchmwrt] 做任何修改
     steps:
       - name: 密匙检测（密匙为空则退出）
         run: |
@@ -175,30 +174,35 @@ jobs:
           # 克隆fanchmwrt主分支
           git clone -b "${{ github.event.inputs.REPO_BRANCH_MAIN }}" --single-branch "${REPO_URL}" openwrt
           cd openwrt
-          # 切换到指定的openwrt基础分支（确保分支存在）
+          # 切换到指定的openwrt基础分支（已改为fanchmwrt-24.10.4）
           git fetch --depth 1 origin "${{ github.event.inputs.REPO_BRANCH_OPENWRT }}"
           git checkout "${{ github.event.inputs.REPO_BRANCH_OPENWRT }}"
           cd ..
           ln -sf /${{ env.DIY_WORK }}/openwrt ${GITHUB_WORKSPACE}/openwrt
+          # 复制本地build目录到源码内
           cp -Rf ${GITHUB_WORKSPACE}/build ${GITHUB_WORKSPACE}/openwrt/build
           chmod -R +x ${GITHUB_WORKSPACE}/openwrt/build
       - name: 公 告
         if: env.REPO_TOKEN
         run: |
-          cd ${GITHUB_WORKSPACE}
-          cd openwrt
-          source ${BUILD_PATH}/common.sh && Diy_menu2
+          cd ${GITHUB_WORKSPACE}/openwrt
+          # 重新加载settings.ini获取变量
+          source build/${{ env.FOLDER_NAME }}/settings.ini
+          # 引用本地common.sh脚本
+          source build/${{ env.FOLDER_NAME }}/common.sh && Diy_menu2
       - name: 更新插件源
         if: env.REPO_TOKEN
         run: |
-          cd openwrt
+          cd ${GITHUB_WORKSPACE}/openwrt
           # 集成nikki插件源
           echo "src-git nikki ${NIKKI_REPO_URL}" >> feeds.conf.default
-          source ${BUILD_PATH}/common.sh && Diy_menu3
+          # 重新加载settings.ini+引用common.sh
+          source build/${{ env.FOLDER_NAME }}/settings.ini
+          source build/${{ env.FOLDER_NAME }}/common.sh && Diy_menu3
       - name: 加载自定义设置
         if: env.REPO_TOKEN
         run: |
-          cd openwrt
+          cd ${GITHUB_WORKSPACE}/openwrt
           # 替换为xiaobaoji配置
           rm -rf .config
           git clone --depth 1 ${CONFIG_REPO_URL} config-temp
@@ -215,14 +219,18 @@ jobs:
           echo "CONFIG_TARGET_IMAGES_${FILESYSTEM}=y" >> .config
           echo "CONFIG_TARGET_${FILESYSTEM}_BLOCKSIZE=256" >> .config
           echo "# CONFIG_TARGET_IMAGES_ext4fs is not set" >> .config
-          source ${BUILD_PATH}/common.sh && Diy_menu4
+          # 重新加载settings.ini+引用common.sh
+          source build/${{ env.FOLDER_NAME }}/settings.ini
+          source build/${{ env.FOLDER_NAME }}/common.sh && Diy_menu4
       - name: 安装插件源
         if: env.REPO_TOKEN
         run: |
-          cd openwrt
+          cd ${GITHUB_WORKSPACE}/openwrt
           ./scripts/feeds update -a
           ./scripts/feeds install -a
-          source ${BUILD_PATH}/common.sh && Diy_menu5
+          # 重新加载settings.ini+引用common.sh
+          source build/${{ env.FOLDER_NAME }}/settings.ini
+          source build/${{ env.FOLDER_NAME }}/common.sh && Diy_menu5
       - name: SSH远程连接（make menuconfig）
         if: env.SSH_ACTION == 'true'
         uses: danshui-git/debugger-action@main
@@ -230,9 +238,11 @@ jobs:
         if: env.REPO_TOKEN
         id: compile
         run: |
-          cd openwrt
+          cd ${GITHUB_WORKSPACE}/openwrt
           make defconfig
-          source ${BUILD_PATH}/common.sh && Diy_menu6
+          # 重新加载settings.ini+引用common.sh
+          source build/${{ env.FOLDER_NAME }}/settings.ini
+          source build/${{ env.FOLDER_NAME }}/common.sh && Diy_menu6
       - name: 上传"${{ matrix.target }}"配置文件在 Github Artifacts
         if: steps.compile.outcome == 'success'
         uses: actions/upload-artifact@main
@@ -243,8 +253,10 @@ jobs:
         continue-on-error: true
         if: env.COMPILATION_INFORMATION == 'true'
         run: |
-          cd openwrt
-          source ${BUILD_PATH}/common.sh && Diy_xinxi
+          cd ${GITHUB_WORKSPACE}/openwrt
+          # 重新加载settings.ini+引用common.sh
+          source build/${{ env.FOLDER_NAME }}/settings.ini
+          source build/${{ env.FOLDER_NAME }}/common.sh && Diy_xinxi
       - name: 清理Actions空间
         continue-on-error: true
         if: env.REPO_TOKEN
@@ -269,19 +281,21 @@ jobs:
         id: gitpush
         if: steps.compile.outcome == 'success' && env.REPO_TOKEN
         run: |
-          cd ${GITHUB_WORKSPACE}
-          source ${BUILD_PATH}/common.sh && build_openwrt
+          cd ${GITHUB_WORKSPACE}/openwrt
+          # 重新加载settings.ini+引用common.sh
+          source build/${{ env.FOLDER_NAME }}/settings.ini
+          source build/${{ env.FOLDER_NAME }}/common.sh && build_openwrt
       - name: Telegram或pushplus信息通知
         if: env.PUSH_PLUS_TOKEN && env.INFORMATION_NOTICE == 'Pushplus' || env.TELEGRAM_BOT_TOKEN && env.INFORMATION_NOTICE == 'Telegram'
         run: |
           if [[ "${{ env.INFORMATION_NOTICE }}" == "Telegram" ]]; then
             if [[ "${{steps.gitpush.outcome}}" == 'success' ]]; then
-              curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=🎉 主人💕：您的编译脚本成功触发【${{matrix.target}}】文件夹编译【${{ github.event.inputs.REPO_BRANCH_MAIN }}分支+${{ github.event.inputs.REPO_BRANCH_OPENWRT }}分支的${{env.TARGET_PROFILE}}】固件中,请耐心等待...... 😋(${{env.WAREHOUSE_MAN}}仓库的#${{env.RUN_NUMBER}}号)！($(date +%Y年%m月%d号%H时%M分))💐" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+              curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=🎉 主人💕：您的编译脚本成功触发【${{matrix.target}}】文件夹编译【${{ github.event.inputs.REPO_BRANCH_MAIN }}分支】固件中,请耐心等待...... 😋(${{env.WAREHOUSE_MAN}}仓库的#${{env.RUN_NUMBER}}号)！($(date +%Y年%m月%d号%H时%M分))💐" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
             fi
           fi
           if [[ "${{ env.INFORMATION_NOTICE }}" == "Pushplus" ]]; then
             if [[ "${{steps.gitpush.outcome}}" == 'success' ]]; then
-              curl -k --data token="${{ secrets.PUSH_PLUS_TOKEN }}" --data title="开始编译【${{matrix.target}}】" --data "content=🎉 主人💕：您的编译脚本成功触发【${{matrix.target}}】文件夹编译【${{ github.event.inputs.REPO_BRANCH_MAIN }}分支+${{ github.event.inputs.REPO_BRANCH_OPENWRT }}分支的${{env.TARGET_PROFILE}}】固件中,请耐心等待...... 😋(${{env.WAREHOUSE_MAN}}仓库的#${{env.RUN_NUMBER}}号)！($(date +%Y年%m月%d号%H时%M分))💐" "http://www.pushplus.plus/send"
+              curl -k --data token="${{ secrets.PUSH_PLUS_TOKEN }}" --data title="开始编译【${{matrix.target}}】" --data "content=🎉 主人💕：您的编译脚本成功触发【${{matrix.target}}】文件夹编译【${{ github.event.inputs.REPO_BRANCH_MAIN }}分支】固件中,请耐心等待...... 😋(${{env.WAREHOUSE_MAN}}仓库的#${{env.RUN_NUMBER}}号)！($(date +%Y年%m月%d号%H时%M分))💐" "http://www.pushplus.plus/send"
             fi
           fi
           if [[ "${{ env.INFORMATION_NOTICE }}" == "WX" ]]; then
