@@ -13,10 +13,10 @@ on:
       REPO_BRANCH_OPENWRT:
         description: 'openwrt基础分支选择（必填）'
         required: true  # 强制必填，避免空值
-        default: 'main'  # 设为仓库实际存在的分支（请确认仓库分支名，若不是main需修改）
+        default: 'fanchmwrt-24.10.4'  # 设为仓库实际存在的分支（请确认仓库分支名，若不是main需修改）
         type: choice
         options:
-          - 'main'  # 仅保留仓库实际存在的分支
+          - 'fanchmwrt-24.10.4'  # 仅保留仓库实际存在的分支
       CONFIG_FILE:
         description: '请选择[seed文件夹内]的配置文件'
         required: true
