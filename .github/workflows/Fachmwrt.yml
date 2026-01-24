@@ -1,0 +1,287 @@
+# Fanchmwrt-UGREEN-x64 云编译工作流（无上游同步）
+name: Fanchmwrt-UGREEN-x64
+on:
+  workflow_dispatch:
+    inputs:
+      REPO_BRANCH_MAIN:
+        description: 'fanchmwrt主分支选择'
+        required: true
+        default: 'fanchmwrt-24.10.4'
+        type: choice
+        options:
+          - 'fanchmwrt-24.10.4'
+      REPO_BRANCH_OPENWRT:
+        description: 'openwrt基础分支选择'
+        required: true
+        default: 'openwrt-main'
+        type: choice
+        options:
+          - 'openwrt-main'
+      CONFIG_FILE:
+        description: '请选择[seed文件夹内]的配置文件'
+        required: true
+        default: 'x86_64'
+        type: choice
+        options:
+          - 'x86_64'
+      CPU_SELECTION:
+        description: 'CPU优选,增加编译速度'
+        required: true
+        default: '默认'
+        type: choice
+        options:
+          - '默认'
+          - '8370C'
+          - '8272CL'
+          - '8171M'
+      INFORMATION_NOTICE:
+        description: 'Telegram或pushplus信息通知'
+        required: true
+        default: 'Telegram'
+        type: choice
+        options:
+          - '关闭'
+          - 'Telegram'
+          - 'Pushplus'
+      SSH_ACTION:
+        description: 'SSH远程配置固件'
+        required: false
+        default: 'false'
+        type: boolean
+      UPLOAD_FIRMWARE:
+        description: '上传固件到 Github Artifacts'
+        required: false
+        default: 'true'
+        type: boolean
+      UPLOAD_RELEASE:
+        description: '发布固件到 Github Releases'
+        required: false
+        default: 'true'
+        type: boolean
+      CACHEWRTBUILD_SWITCH:
+        description: '缓存加速编译'
+        required: false
+        default: 'true'
+        type: boolean
+      UPDATE_FIRMWARE_ONLINE:
+        description: '增加在线更新固件功能'
+        required: false
+        default: 'true'
+        type: boolean
+      COMPILATION_INFORMATION:
+        description: '是否显示编译信息'
+        required: false
+        default: 'true'
+        type: boolean
+  # 定时触发开启开始编译(把下面两个#去掉开启)
+  # schedule:
+  #   - cron: 35 18 * * *
+env:
+  GITHUB_LINK: https://github.com/${{github.repository}}
+  GIT_ACTOR: ${{github.actor}}
+  GIT_REPOSITORY: ${{github.repository}}
+  RUN_NUMBER: ${{github.run_number}}
+  RUN_WORKFLOW: ${{github.workflow}}
+  REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+  PUSH_PLUS_TOKEN: ${{ secrets.PUSH_PLUS_TOKEN }}
+  TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+  TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+  WX_TOKEN: ${{ secrets.WX_TOKEN }}
+  CURL: ${{ secrets.CURL }}
+  TZ: Asia/Shanghai
+  LC_ALL: C
+  LANG: C
+  LANGUAGE: C
+  # 自定义核心配置（适配需求）
+  REPO_URL: https://github.com/fanchmwrt/fanchmwrt
+  CONFIG_REPO_URL: https://github.com/xiaobaoji/openwrt
+  NIKKI_REPO_URL: https://github.com/nikkinikki-org/OpenWrt-nikki
+  LAN_IP: 192.168.123.2
+  DEVICE_NAME: UGREEN
+  ROOTFS_SIZE: 1024
+  FILESYSTEM: squashfs
+jobs:
+  build:
+    name: 启动"${{ matrix.target }}-${{ github.event.inputs.REPO_BRANCH_MAIN }}"触发编译
+    runs-on: ubuntu-22.04
+    if: ${{ github.event.repository.owner.id }} == ${{ github.event.sender.id }}
+    env:
+      FOLDER_NAME: ${{ matrix.target }}
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [Fanchmwrt]
+        # 请勿对 target: [Fanchmwrt] 做任何修改
+    steps:
+      - name: 密匙检测（密匙为空则退出）
+        run: |
+          cd ${GITHUB_WORKSPACE}
+          if [[ -z "${{ secrets.REPO_TOKEN }}" ]]; then
+            echo "您没有设置仓库密匙，请按教程设置好密匙再来"
+            echo "REPO_TOKEN密匙制作教程：https://git.io/jm.md"
+            exit 1
+          fi
+      - name: 准备结束
+        uses: actions/checkout@v4
+      - name: 检测本地关键文件（无上游同步）
+        run: |
+          cd ${GITHUB_WORKSPACE}
+          # 检查本地核心自定义文件是否存在（缺失则终止）
+          required_files=(
+            "seed/${{ github.event.inputs.CONFIG_FILE }}.config"
+            "build/${{ env.FOLDER_NAME }}/diy-part.sh"
+            "build/${{ env.FOLDER_NAME }}/settings.ini"
+            "build/${{ env.FOLDER_NAME }}/common.sh"
+          )
+          for file in "${required_files[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "错误：本地关键文件 $file 缺失，请补充后再编译"
+              exit 1
+            fi
+          done
+          # 加载本地配置与工作流输入变量
+          source ${GITHUB_WORKSPACE}/build/${{ env.FOLDER_NAME }}/settings.ini
+          export INPUTS_REPO_BRANCH_MAIN="${{ github.event.inputs.REPO_BRANCH_MAIN }}"
+          export INPUTS_REPO_BRANCH_OPENWRT="${{ github.event.inputs.REPO_BRANCH_OPENWRT }}"
+          export INPUTS_CONFIG_FILE="${{ github.event.inputs.CONFIG_FILE }}"
+          export INPUTS_CPU_SELECTION="${{ github.event.inputs.CPU_SELECTION }}"
+          export INPUTS_INFORMATION_NOTICE="${{ github.event.inputs.INFORMATION_NOTICE }}"
+          export INPUTS_SSH_ACTION="${{ github.event.inputs.SSH_ACTION }}"
+          export INPUTS_UPLOAD_FIRMWARE="${{ github.event.inputs.UPLOAD_FIRMWARE }}"
+          export INPUTS_UPLOAD_RELEASE="${{ github.event.inputs.UPLOAD_RELEASE }}"
+          export INPUTS_CACHEWRTBUILD_SWITCH="${{ github.event.inputs.CACHEWRTBUILD_SWITCH }}"
+          export INPUTS_UPDATE_FIRMWARE_ONLINE="${{ github.event.inputs.UPDATE_FIRMWARE_ONLINE }}"
+          export INPUTS_COMPILATION_INFORMATION="${{ github.event.inputs.COMPILATION_INFORMATION }}"
+          # 执行本地初始化逻辑
+          source build/${{ env.FOLDER_NAME }}/common.sh && Diy_menu1
+      - name: 部署编译环境
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo -E apt-get -qq update -y
+          sudo -E apt-get -qq install -y gawk git gettext libssl-dev xsltproc zip git-core wget curl grep python2.7 python3 python3-pip libpython3-dev \
+            build-essential clang flex bison g++ gawk gcc-multilib g++-multilib libncurses5-dev zlib1g-dev file libelf-dev liblzma-dev binutils subversion patch
+          sudo timedatectl set-timezone "$TZ"
+          sudo mkdir -p /${{ env.DIY_WORK }}
+          sudo chown $USER:$GROUPS /${{ env.DIY_WORK }}
+      - name: 下载"${{ matrix.target }}-${{ github.event.inputs.REPO_BRANCH_MAIN }}"源码
+        working-directory: /${{ env.DIY_WORK }}
+        run: |
+          git clone -b "${{ github.event.inputs.REPO_BRANCH_MAIN }}" --single-branch "${REPO_URL}" openwrt
+          cd openwrt
+          git fetch --depth 1 origin "${{ github.event.inputs.REPO_BRANCH_OPENWRT }}"
+          git checkout "${{ github.event.inputs.REPO_BRANCH_OPENWRT }}"
+          cd ..
+          ln -sf /${{ env.DIY_WORK }}/openwrt ${GITHUB_WORKSPACE}/openwrt
+          cp -Rf ${GITHUB_WORKSPACE}/build ${GITHUB_WORKSPACE}/openwrt/build
+          chmod -R +x ${GITHUB_WORKSPACE}/openwrt/build
+      - name: 公 告
+        if: env.REPO_TOKEN
+        run: |
+          cd ${GITHUB_WORKSPACE}
+          cd openwrt
+          source ${BUILD_PATH}/common.sh && Diy_menu2
+      - name: 更新插件源
+        if: env.REPO_TOKEN
+        run: |
+          cd openwrt
+          # 集成nikki插件源
+          echo "src-git nikki ${NIKKI_REPO_URL}" >> feeds.conf.default
+          source ${BUILD_PATH}/common.sh && Diy_menu3
+      - name: 加载自定义设置
+        if: env.REPO_TOKEN
+        run: |
+          cd openwrt
+          # 替换为xiaobaoji配置
+          rm -rf .config
+          git clone --depth 1 ${CONFIG_REPO_URL} config-temp
+          cp config-temp/.config .config
+          rm -rf config-temp
+          # 定制固件核心配置
+          sed -i "s/192.168.1.1/${LAN_IP}/g" package/base-files/files/bin/config_generate
+          sed -i "s/OpenWrt/${DEVICE_NAME}/g" package/base-files/files/bin/config_generate
+          sed -i "s/CONFIG_TARGET_ROOTFS_PARTSIZE=.*/CONFIG_TARGET_ROOTFS_PARTSIZE=${ROOTFS_SIZE}/g" .config
+          sed -i 's/root::0:0:99999:7:::/root::0:0:99999:7:::/g' package/base-files/files/etc/shadow
+          echo "CONFIG_TARGET_x86=y" >> .config
+          echo "CONFIG_TARGET_x86_64=y" >> .config
+          echo "CONFIG_TARGET_IMAGES_img=y" >> .config
+          echo "CONFIG_TARGET_IMAGES_${FILESYSTEM}=y" >> .config
+          echo "CONFIG_TARGET_${FILESYSTEM}_BLOCKSIZE=256" >> .config
+          echo "# CONFIG_TARGET_IMAGES_ext4fs is not set" >> .config
+          source ${BUILD_PATH}/common.sh && Diy_menu4
+      - name: 安装插件源
+        if: env.REPO_TOKEN
+        run: |
+          cd openwrt
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
+          source ${BUILD_PATH}/common.sh && Diy_menu5
+      - name: SSH远程连接（make menuconfig）
+        if: env.SSH_ACTION == 'true'
+        uses: danshui-git/debugger-action@main
+      - name: 生成"${{ matrix.target }}"配置文件
+        if: env.REPO_TOKEN
+        id: compile
+        run: |
+          cd openwrt
+          make defconfig
+          source ${BUILD_PATH}/common.sh && Diy_menu6
+      - name: 上传"${{ matrix.target }}"配置文件在 Github Artifacts
+        if: steps.compile.outcome == 'success'
+        uses: actions/upload-artifact@main
+        with:
+          name: .config_${{ env.SOURCE }}_${{ env.LUCI_EDITION }}_${{ env.TARGET_PROFILE }}_${{ env.Firmware_Date }}
+          path: openwrt/build_logo/config.txt
+      - name: 编译信息
+        continue-on-error: true
+        if: env.COMPILATION_INFORMATION == 'true'
+        run: |
+          cd openwrt
+          source ${BUILD_PATH}/common.sh && Diy_xinxi
+      - name: 清理Actions空间
+        continue-on-error: true
+        if: env.REPO_TOKEN
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          token: ${{ secrets.REPO_TOKEN }}
+          repository: ${{ github.repository }}
+          retain_min: ${{ env.RETAIN_MINUTE }}
+      - name: 清理releases
+        continue-on-error: true
+        if: env.REPO_TOKEN
+        uses: ophub/delete-releases-workflows@main
+        with:
+          delete_releases: true
+          releases_keep_keyword: targz/Update
+          releases_keep_latest: ${{ env.KEEP_LATEST }}
+          delete_tags: true
+          delete_workflows: false
+          workflows_keep_day: 90
+          gh_token: ${{ secrets.REPO_TOKEN }}
+      - name: 触发启动"${{ matrix.target }}"开始编译
+        id: gitpush
+        if: steps.compile.outcome == 'success' && env.REPO_TOKEN
+        run: |
+          cd ${GITHUB_WORKSPACE}
+          source ${BUILD_PATH}/common.sh && build_openwrt
+      - name: Telegram或pushplus信息通知
+        if: env.PUSH_PLUS_TOKEN && env.INFORMATION_NOTICE == 'Pushplus' || env.TELEGRAM_BOT_TOKEN && env.INFORMATION_NOTICE == 'Telegram'
+        run: |
+          if [[ "${{ env.INFORMATION_NOTICE }}" == "Telegram" ]]; then
+            if [[ "${{steps.gitpush.outcome}}" == 'success' ]]; then
+              curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=🎉 主人💕：您的编译脚本成功触发【${{matrix.target}}】文件夹编译【${{ github.event.inputs.REPO_BRANCH_MAIN }}分支+${{ github.event.inputs.REPO_BRANCH_OPENWRT }}分支的${{env.TARGET_PROFILE}}】固件中,请耐心等待...... 😋(${{env.WAREHOUSE_MAN}}仓库的#${{env.RUN_NUMBER}}号)！($(date +%Y年%m月%d号%H时%M分))💐" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+            fi
+          fi
+          if [[ "${{ env.INFORMATION_NOTICE }}" == "Pushplus" ]]; then
+            if [[ "${{steps.gitpush.outcome}}" == 'success' ]]; then
+              curl -k --data token="${{ secrets.PUSH_PLUS_TOKEN }}" --data title="开始编译【${{matrix.target}}】" --data "content=🎉 主人💕：您的编译脚本成功触发【${{matrix.target}}】文件夹编译【${{ github.event.inputs.REPO_BRANCH_MAIN }}分支+${{ github.event.inputs.REPO_BRANCH_OPENWRT }}分支的${{env.TARGET_PROFILE}}】固件中,请耐心等待...... 😋(${{env.WAREHOUSE_MAN}}仓库的#${{env.RUN_NUMBER}}号)！($(date +%Y年%m月%d号%H时%M分))💐" "http://www.pushplus.plus/send"
+            fi
+          fi
+          if [[ "${{ env.INFORMATION_NOTICE }}" == "WX" ]]; then
+            if [[ "${{steps.gitpush.outcome}}" == 'success' ]] && [[ "${{steps.compile.outcome}}" == 'success' ]]; then
+              curl -k --data token="${{ secrets.WX_TOKEN }}" --data title="开始编译【${{ env.FOLDER_NAME }}】" --data "message=🎉 主人💕：您的编译脚本成功触发【${{ env.FOLDER_NAME }}】文件夹编译【${{env.TARGET_PROFILE}}】固件中,请耐心等待...... 😋(${{env.Tongzhi_Date}})" "http://${{ secrets.CURL }}/push?token=${{ secrets.WX_TOKEN }}&"
+            else
+              curl -k --data token="${{ secrets.WX_TOKEN }}" --data title="触发启动失败" --data "message=💥主人❌ ：脚本错误,触发启动【${{ env.FOLDER_NAME }}】失败,请点击触发脚本步骤查看详情!(${{env.Tongzhi_Date}})" "http://${{ secrets.CURL }}/push?token=${{ secrets.WX_TOKEN }}&"
+              exit 1
+            fi
+          fi
