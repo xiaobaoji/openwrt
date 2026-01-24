@@ -10,13 +10,7 @@ on:
         type: choice
         options:
           - 'fanchmwrt-24.10.4'
-      REPO_BRANCH_OPENWRT:
-        description: 'openwrt基础分支选择'
-        required: true
-        default: 'openwrt-main'
-        type: choice
-        options:
-          - 'openwrt-main'
+      
       CONFIG_FILE:
         description: '请选择[seed文件夹内]的配置文件'
         required: true
