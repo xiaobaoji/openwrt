@@ -1,4 +1,4 @@
-# Fanchmwrt-UGREEN-x64 云编译工作流（无上游同步）
+# Fanchmwrt-UGREEN-x64 云编译工作流（修复分支空值问题）
 name: Fanchmwrt-UGREEN-x64
 on:
   workflow_dispatch:
@@ -10,7 +10,13 @@ on:
         type: choice
         options:
           - 'fanchmwrt-24.10.4'
-      
+      REPO_BRANCH_OPENWRT:
+        description: 'openwrt基础分支选择（必填）'
+        required: true  # 强制必填，避免空值
+        default: 'main'  # 设为仓库实际存在的分支（请确认仓库分支名，若不是main需修改）
+        type: choice
+        options:
+          - 'main'  # 仅保留仓库实际存在的分支
       CONFIG_FILE:
         description: '请选择[seed文件夹内]的配置文件'
         required: true
@@ -158,11 +164,18 @@ jobs:
           sudo timedatectl set-timezone "$TZ"
           sudo mkdir -p /${{ env.DIY_WORK }}
           sudo chown $USER:$GROUPS /${{ env.DIY_WORK }}
-      - name: 下载"${{ matrix.target }}-${{ github.event.inputs.REPO_BRANCH_MAIN }}"源码
+      - name: 下载"${{ matrix.target }}-${{ github.event.inputs.REPO_BRANCH_MAIN }}"源码（增加分支空值检查）
         working-directory: /${{ env.DIY_WORK }}
         run: |
+          # 检查openwrt基础分支变量是否为空
+          if [ -z "${{ github.event.inputs.REPO_BRANCH_OPENWRT }}" ]; then
+            echo "错误：REPO_BRANCH_OPENWRT分支变量为空，请选择有效分支"
+            exit 1
+          fi
+          # 克隆fanchmwrt主分支
           git clone -b "${{ github.event.inputs.REPO_BRANCH_MAIN }}" --single-branch "${REPO_URL}" openwrt
           cd openwrt
+          # 切换到指定的openwrt基础分支（确保分支存在）
           git fetch --depth 1 origin "${{ github.event.inputs.REPO_BRANCH_OPENWRT }}"
           git checkout "${{ github.event.inputs.REPO_BRANCH_OPENWRT }}"
           cd ..
